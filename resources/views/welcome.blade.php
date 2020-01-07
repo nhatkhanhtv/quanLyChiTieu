@@ -14,11 +14,12 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-        <div id="example">
+            <div id="example">
             </div>
-       
-            </div> 
-            <script type="text/javascript" src="/js/app.js" ></script>    
+            <div id="grid">
+            </div>
+        </div> 
+        <script type="text/javascript" src="/js/app.js" ></script>    
     </body>
     
 </html>

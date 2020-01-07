@@ -1,24 +1,20 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+//import { Values } from "redux-form-website-template";
+import store from "../store/store";
+import showResults from "./Form/showResults";
+import SimpleForm from "./Form/SimpleForm";
 
-export default class Example extends Component {
-    render() {
-        return (
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-header">Example Component</div>
+const rootEl = document.getElementById("example");
 
-                            <div className="card-body">I'm an example component!</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
-
-if (document.getElementById('example')) {
-    ReactDOM.render(<Example />, document.getElementById('example'));
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <div style={{ padding: 15 }}>
+      <h2>Simple Form</h2>
+      <SimpleForm onSubmit={showResults} />
+      {/* <Values form="simple" /> */}
+    </div>
+  </Provider>,
+  rootEl
+);
