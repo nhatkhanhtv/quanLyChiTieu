@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 CRUD::resource('thuChi', 'ThongTinThuChiController');
+Route::post('thuChi', 'ThongTinThuChiController@store');

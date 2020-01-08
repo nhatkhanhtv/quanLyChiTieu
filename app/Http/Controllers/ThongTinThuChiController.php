@@ -11,6 +11,15 @@ class ThongTinThuChiController extends Controller
         $data = ThongTinThuChi::all();
         return $data;
     }
+
+    public function store(Request $request) {
+        $data=$request->all();
+        //$var = $data['date_birth'];
+        //$data['date_birth']= date("Y-m-d", strtotime($var) );
+        $model = new ThongTinThuChi();
+
+        $data = $model->create($data);
+    }
 }
 
 ?>

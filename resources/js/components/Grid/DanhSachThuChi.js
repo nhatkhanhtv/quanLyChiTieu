@@ -49,7 +49,7 @@ export default function DanhSachThuChi(props) {
                     {data.map( row => renderRow(row))}
                 </TableBody>
             </Table>
-            <DialogThuChi getApi={getApi} />
+            <DialogThuChi getApi={getApi} urlApi={url}/>
         </Fragment>
     );
 }
