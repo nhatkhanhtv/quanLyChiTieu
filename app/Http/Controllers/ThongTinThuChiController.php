@@ -17,7 +17,7 @@ class ThongTinThuChiController extends Controller
         //$var = $data['date_birth'];
         //$data['date_birth']= date("Y-m-d", strtotime($var) );
         $model = new ThongTinThuChi();
-
+        $data['ngay_thang_nam'] = date('Y-m-d',strtotime($data['ngay_thang_nam']));
         $data = $model->create($data);
     }
 }
