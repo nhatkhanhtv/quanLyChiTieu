@@ -33,7 +33,7 @@ export default function DialogThuChi(props) {
             text:"Khoản chi"
         },
         {
-            id:1,
+            id:2,
             text:"Khoản thu"
         },
         
@@ -43,6 +43,20 @@ export default function DialogThuChi(props) {
     const handleDateChange = key => date => {
         setSelectedDate(date);
         setData({ ...data, [key]: date });
+        //console.log(date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear())
+
+    };
+
+    const handleRadioChange = key => event => {
+        
+        const { value, checked } = event.target;      
+        var val = parseInt(value);
+        if(checked)
+        {
+            setData({ ...data, [key]: val });
+        }     
+          
+        
         //console.log(date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear())
 
     };
@@ -69,6 +83,7 @@ export default function DialogThuChi(props) {
             console.log(error);
         });
     }
+    
 
     return (
         <Paper>
@@ -86,19 +101,20 @@ export default function DialogThuChi(props) {
                     value = {data.so_tien}
                     />
                 
-                <RenderDateField 
+                {/* <RenderDateField 
                     name = 'ngay_thang_nam'
                     label = 'Ngày'
                     handleDateChange = {handleDateChange('ngay_thang_nam')}
                     selectedDate = {selectedDate}
-                />
+                /> */}
 
                 
                 <RenderRadioButton 
                     name = 'loai'
                     label = 'Loại'
-                  
+                    value={data.loai}
                     radioData = {radioData}
+                    handleRadioChange = {handleRadioChange('loai')}
                  />
                 
                 <Button type="submit">Chấp nhận</Button>
