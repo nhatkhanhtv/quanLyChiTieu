@@ -101,12 +101,12 @@ export default function DialogThuChi(props) {
                     value = {data.so_tien}
                     />
                 
-                {/* <RenderDateField 
+                <RenderDateField 
                     name = 'ngay_thang_nam'
                     label = 'Ngày'
                     handleDateChange = {handleDateChange('ngay_thang_nam')}
                     selectedDate = {selectedDate}
-                /> */}
+                />
 
                 
                 <RenderRadioButton 

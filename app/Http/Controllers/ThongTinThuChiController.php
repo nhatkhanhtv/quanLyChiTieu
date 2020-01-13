@@ -8,8 +8,16 @@ class ThongTinThuChiController extends Controller
 {
     public function index(Request $request) 
     {
-        $data = ThongTinThuChi::all();
-        return $data;
+        $search_term = $request->input('searchQuery');
+        $rowsPerPage = $request->per_page;
+        
+        if ($search_term!="undefined") {
+            $results = ThongTinThuChi::select('*')->where('noi_dung', 'LIKE', '%'.$search_term.'%')->orderBy('id','desc')->paginate($rowsPerPage);
+        } else {
+            $results = ThongTinThuChi::select('*')->orderBy('id','desc')->paginate($rowsPerPage);
+        }
+
+        return $results;
     }
 
     public function store(Request $request) {
