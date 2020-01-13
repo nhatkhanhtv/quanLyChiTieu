@@ -5,8 +5,8 @@ import {makeStyles,useTheme} from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Table from '@material-ui/core/Table';
 import { TableBody, TableHead, TableRow, TableCell, TableFooter } from '@material-ui/core';
-import PagerThuChi from './PagerThuChi';
-
+import TablePagination from '@material-ui/core/TablePagination';
+//import { PagerThuChi } from './PagerThuChi';
 import DialogThuChi from './DialogThuChi';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -95,7 +95,77 @@ export default function DanhSachThuChi(props) {
        
     // };
 
+    function PagerThuChi(props) {
+        const theme = useTheme();
+        const classes = useStyles1(theme);
+        
+        //console.log(classes);
+        const { count, page, rowsPerPage, onChangePage } = props;
     
+        function handleFirstPageButtonClick(event) {
+          //onChangePage(event, 0);
+          if(state.prev_page_url != null){
+            getApi(state.first_page_url+'&searchQuery='+search+'&per_page='+state.per_page.toString());
+          }
+        }
+    
+        function handleBackButtonClick(event) {
+          //onChangePage(event, page - 1);
+          if(state.prev_page_url != null){
+            getApi(state.prev_page_url+'&searchQuery='+search+'&per_page='+state.per_page.toString());
+          }
+        }
+    
+        function handleNextButtonClick(event) {
+          //onChangePage(event, state.current_page+1);
+          
+          if(state.next_page_url != null){
+            getApi(state.next_page_url+'&searchQuery='+search+'&per_page='+state.per_page.toString());
+          }
+        }
+    
+        function handleLastPageButtonClick(event) {
+          //onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+          if(state.next_page_url != null){
+            getApi(state.last_page_url+'&searchQuery='+search+'&per_page='+state.per_page.toString());
+          }
+        }
+    
+        return (
+          <div className={classes.root}>
+            <IconButton
+              onClick={handleFirstPageButtonClick}
+              disabled={state.prev_page_url === null}
+              aria-label="first page"
+            >
+              {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={state.prev_page_url === null} aria-label="previous page">
+              {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+              onClick={handleNextButtonClick}
+              disabled={state.current_page >= Math.ceil(count / rowsPerPage) - 1}
+              aria-label="next page"
+            >
+              {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+              onClick={handleLastPageButtonClick}
+              disabled={state.current_page >= Math.ceil(count / rowsPerPage) - 1}
+              aria-label="last page"
+            >
+              {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+          </div>
+        );
+      }
+      PagerThuChi.propTypes = {
+    count: PropTypes.number.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+    };
     
       function handleChangePage(event, newPage) {
         
@@ -145,15 +215,22 @@ export default function DanhSachThuChi(props) {
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <PagerThuChi 
+                        <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={3}
+                            count={state.total?state.total:0}
+                            rowsPerPage={state.per_page?state.per_page:0}
+                            page={state.current_page}
+                            SelectProps={{
+                              inputProps: { 'aria-label': 'rows per page' },
+                              native: true,
+                            }}
                             state = {state}
-                            getApi = {getApi}
-                            rows = {data}
+                            search = {search}
+                            //getApi={getApi}
                             onChangePage={getApi}
-                            count = {state.total?state.total:0}
                             onChangeRowsPerPage={handleChangeRowsPerPage}
+                            ActionsComponent={PagerThuChi}
                         />
                     </TableRow>
                 </TableFooter>
