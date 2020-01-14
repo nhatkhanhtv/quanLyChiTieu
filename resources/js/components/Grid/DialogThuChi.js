@@ -6,6 +6,11 @@ import TextField from '@material-ui/core/TextField';
 import RenderTextField from './RenderTextField';
 import RenderDateField from './RenderDateField';
 import RenderRadioButton from './RenderRadioButton';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,8 +22,12 @@ const useStyles = makeStyles(theme => ({
   }));
 
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function DialogThuChi(props) {
-    const { urlApi, getApi } = props;
+    const { urlApi, getApi, radioData, urlGetData, openFormDialog, setOpenFormDialog } = props;
     //const [data,setData] = useState(null);\
     const [data,setData] = useState({
         noi_dung:"",
@@ -27,18 +36,23 @@ export default function DialogThuChi(props) {
         loai:0
     });
 
-    const radioData = [
-        {
-            id:1,
-            text:"Khoản chi"
-        },
-        {
-            id:2,
-            text:"Khoản thu"
-        },
-        
-    ];
+    const handleClickOpen = () => {
+        setOpenFormDialog(true);
+      };
+    
+    const handleClose = () => {
+        setOpenFormDialog(false);
+        // clearForm();
+    };    
 
+    const handleResetForm = () => {
+        let form = {noi_dung:"",
+        so_tien:"",
+        ngay_thang_nam:new Date(Date.now()).toLocaleString(),
+        loai:0};
+        setData({ ...data, form });
+    };    
+  
     const [selectedDate, setSelectedDate] = React.useState(new Date(Date.now()).toLocaleString());
     const handleDateChange = key => date => {
         setSelectedDate(date);
@@ -66,8 +80,14 @@ export default function DialogThuChi(props) {
     }
 
     const handleSubmit = event => {
-        sendData();
-        console.log(data);
+        sendData();        
+        setData({noi_dung:"",
+            so_tien:"",
+            ngay_thang_nam:new Date(Date.now()).toLocaleString(),
+            loai:0
+        });
+        setOpenFormDialog(false);
+        // console.log(data);
         event.preventDefault();
     }
 
@@ -78,7 +98,9 @@ export default function DialogThuChi(props) {
             data:data
         }).then(json=>{
             // let list = json.data;
-            getApi();
+            
+            getApi(urlGetData);
+            
         }).catch(error => {
             console.log(error);
         });
@@ -87,37 +109,64 @@ export default function DialogThuChi(props) {
 
     return (
         <Paper>
+            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Open dialog
+            </Button>
             <form className={classes.root} onSubmit={handleSubmit} noValidate autoComplete="off">
-                <RenderTextField 
-                    name = 'noi_dung'
-                    label = 'Nội dung'
-                    handleTextChange = {handleTextChange('noi_dung')}
-                    value = {data.noi_dung}
-                    />
-                <RenderTextField 
-                    name = 'so_tien'
-                    label = 'Số tiền'
-                    handleTextChange = {handleTextChange('so_tien')}
-                    value = {data.so_tien}
-                    />
-                
-                <RenderDateField 
-                    name = 'ngay_thang_nam'
-                    label = 'Ngày'
-                    handleDateChange = {handleDateChange('ngay_thang_nam')}
-                    selectedDate = {selectedDate}
-                />
+            <Dialog
+                open={openFormDialog}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">{"Use Google's location service?"}</DialogTitle>
+                <DialogContent>
+                        <RenderTextField 
+                            name = 'noi_dung'
+                            label = 'Nội dung'
+                            handleTextChange = {handleTextChange('noi_dung')}
+                            value = {data.noi_dung}
+                            />
+                        <RenderTextField 
+                            name = 'so_tien'
+                            label = 'Số tiền'
+                            handleTextChange = {handleTextChange('so_tien')}
+                            value = {data.so_tien}
+                            />
+                        
+                        <RenderDateField 
+                            name = 'ngay_thang_nam'
+                            label = 'Ngày'
+                            handleDateChange = {handleDateChange('ngay_thang_nam')}
+                            selectedDate = {selectedDate}
+                        />
 
-                
-                <RenderRadioButton 
-                    name = 'loai'
-                    label = 'Loại'
-                    value={data.loai}
-                    radioData = {radioData}
-                    handleRadioChange = {handleRadioChange('loai')}
-                 />
-                
-                <Button type="submit">Chấp nhận</Button>
+                        
+                        <RenderRadioButton 
+                            name = 'loai'
+                            label = 'Loại'
+                            value={data.loai}
+                            radioData = {radioData}
+                            handleRadioChange = {handleRadioChange('loai')}
+                        />
+                        
+                        
+                    
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleResetForm} color="primary">
+                        Reset
+                    </Button>
+                    <Button onClick={handleClose} color="primary">
+                        Hủy bỏ
+                    </Button>
+                    <Button onClick={handleSubmit} color="primary">
+                        Chấp nhận
+                    </Button>
+                </DialogActions>
+            </Dialog>
             </form>
         </Paper>
     )

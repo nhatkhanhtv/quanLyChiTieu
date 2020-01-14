@@ -48,6 +48,18 @@ export default function DanhSachThuChi(props) {
     const [data,setData] = useState([]);
     const [error,setError] = useState([]);
     const [search,setSearch]=useState("");
+    const [openFormDialog,setOpenFormDialog] = useState(false);
+    const radioData = [
+      {
+          id:1,
+          text:"Khoản chi"
+      },
+      {
+          id:2,
+          text:"Khoản thu"
+      },
+      
+  ];    
 
     function getApi(url){
         axios.get(url).then(json=>{
@@ -117,13 +129,16 @@ export default function DanhSachThuChi(props) {
 
 
     const renderRow = (row,index) => {
+        
+          let loai = radioData.find( element => element.id == row.loai);
         return (
                 <TableRow key={row.id}>
                     <TableCell>{index+1}</TableCell>
                     <TableCell>{row.noi_dung}</TableCell>
                     <TableCell>{row.so_tien}</TableCell>
                     <TableCell>{row.ngay_thang_nam}</TableCell>
-                    <TableCell>{row.loai}</TableCell>
+                    <TableCell>{loai.text}</TableCell>
+                    <TableCell></TableCell>
                 </TableRow>
         )
     }
@@ -138,6 +153,7 @@ export default function DanhSachThuChi(props) {
                         <TableCell>Số tiền</TableCell>
                         <TableCell>Ngày</TableCell>
                         <TableCell>Loại</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -158,7 +174,8 @@ export default function DanhSachThuChi(props) {
                     </TableRow>
                 </TableFooter>
             </Table>
-            <DialogThuChi getApi={getApi} urlApi={url}/>
+            <DialogThuChi getApi={getApi} urlApi={url} urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search} setOpenFormDialog={setOpenFormDialog} openFormDialog = {openFormDialog}
+            radioData = {radioData} />
         </Fragment>        
     );
 }
