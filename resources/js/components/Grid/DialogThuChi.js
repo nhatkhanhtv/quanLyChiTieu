@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -27,7 +27,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function DialogThuChi(props) {
-    const { urlApi, getApi, radioData, urlGetData, openFormDialog, setOpenFormDialog } = props;
+    const { 
+        onEdit,
+        emptyRowIndex,
+        rowDataIndex,
+        urlApi, 
+        getApi, 
+        radioData, 
+        urlGetData, 
+        openFormDialog, 
+        setOpenFormDialog 
+    } = props;
+
+    const handleEnterDialog = () => {
+        console.log(props);
+        if(onEdit) {
+            setData({...rowDataIndex});            
+        }
+      };
     //const [data,setData] = useState(null);\
     const [data,setData] = useState({
         noi_dung:"",
@@ -83,7 +100,12 @@ export default function DialogThuChi(props) {
     }
 
     const handleSubmit = event => {
-        sendData();        
+        if(onEdit) {
+            sendUpdate();
+        } else {
+            sendData();        
+        }
+        
         clearForm();
         setOpenFormDialog(false);
         // console.log(data);
@@ -105,14 +127,26 @@ export default function DialogThuChi(props) {
         });
     }
     
-
+    const sendUpdate = () => {
+        axios({
+            method:"put",
+            url: urlApi+"/"+rowDataIndex.id,
+            data:data
+        }).then(json=>{
+            // let list = json.data;
+            
+            getApi(urlGetData);
+            emptyRowIndex();
+        }).catch(error => {
+            console.log(error);
+        });
+    }
     return (
         <Paper>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Open dialog
-            </Button>
+            
             <form className={classes.root} onSubmit={handleSubmit} noValidate autoComplete="off">
             <Dialog
+                onEnter = {handleEnterDialog}
                 open={openFormDialog}
                 TransitionComponent={Transition}
                 keepMounted

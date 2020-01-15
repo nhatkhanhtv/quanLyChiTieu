@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 import {makeStyles,useTheme} from '@material-ui/core/styles';
 import ReactDOM from 'react-dom';
 import Table from '@material-ui/core/Table';
-import { TableBody, TableHead, TableRow, TableCell, TableFooter } from '@material-ui/core';
+import { TableBody, TableHead, TableRow, TableCell, TableFooter, Button } from '@material-ui/core';
 import PagerThuChi from './PagerThuChi';
 
 import DialogThuChi from './DialogThuChi';
 import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import DialogDelete from './DialogDelete';
+
+import RenderTextField from './RenderTextField';
 
 const useStyles1 = makeStyles(theme => ({
     root: {
@@ -47,9 +49,24 @@ export default function DanhSachThuChi(props) {
         prev_page_url:''        
       });
     const [data,setData] = useState([]);
+    //state cho edit delete
+    const [rowDataIndex,setRowDataIndex] = useState(null);
+    const [rowIndex, setRowIndex] = useState("");
+    const [onEdit,setOnEdit] = useState(false);
     const [error,setError] = useState([]);
     const [search,setSearch]=useState("");
+    
     const [openFormDialog,setOpenFormDialog] = useState(false);
+    // const [formData,setFormData] = useState({
+    //   noi_dung:"",
+    //   so_tien:"",
+    //   ngay_thang_nam:new Date(Date.now()).toDateString(),
+    //   loai:1
+    // });
+    const handleAddNew = () => {
+      setOpenFormDialog(true);
+    }
+
     const radioData = [
       {
           id:1,
@@ -127,11 +144,30 @@ export default function DanhSachThuChi(props) {
           getApi(url);
     
         }
+    
+    const handleButtonEdit = (e,row) => {
+      setRowDataIndex(row);
+      setOnEdit(true);
+      setOpenFormDialog(true);
+     // console.log(row);
+    }
 
+    //ham goi sau khi update delete
+    const emptyRowIndex = () => {
+      setRowIndex("");
+      setRowDataIndex(null);
+      setOnEdit(false);
+
+    }
+
+    const handleButtonDelete = (e,id) => {
+      setRowIndex(id);
+      setOpenDeleteDialog(true);
+    }
 
     const renderRow = (row,index) => {
         
-          let loai = radioData.find( element => element.id == row.loai);
+        let loai = radioData.find( element => element.id == row.loai);
         return (
                 <TableRow key={row.id}>
                     <TableCell>{index+1}</TableCell>
@@ -139,10 +175,55 @@ export default function DanhSachThuChi(props) {
                     <TableCell>{row.so_tien}</TableCell>
                     <TableCell>{row.ngay_thang_nam}</TableCell>
                     <TableCell>{loai.text}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>
+                      <IconButton onClick={(e)=>handleButtonEdit(e,row)}>
+                        <EditIcon></EditIcon>
+                      </IconButton>
+                      
+                      <IconButton  onClick={(e)=>handleButtonDelete(e,row.id)}>
+                        <DeleteIcon></DeleteIcon>
+                      </IconButton>
+                    </TableCell>
                 </TableRow>
         )
     }
+
+    // const renderEditRow = (row,index) => {
+    //   let loai = radioData.find( element => element.id == row.loai);
+    //     return (
+    //             <TableRow key={row.id}>
+    //                 <TableCell>{index+1}</TableCell>
+    //                 <TableCell>
+    //                   <RenderTextField 
+    //                         name = 'noi_dung'
+    //                         label = 'Nội dung'
+    //                         handleTextChange = {handleTextChange('noi_dung')}
+    //                         value = {data.noi_dung}
+    //                         />
+    //                 </TableCell>
+    //                 <TableCell>{row.so_tien}</TableCell>
+    //                 <TableCell>{row.ngay_thang_nam}</TableCell>
+    //                 <TableCell>{loai.text}</TableCell>
+    //                 <TableCell>
+    //                   <IconButton onClick={(e)=>handleButtonEdit(e,row)}>
+    //                     <EditIcon></EditIcon>
+    //                   </IconButton>
+                      
+    //                   <IconButton  onClick={(e)=>handleButtonDelete(e,row.id)}>
+    //                     <DeleteIcon></DeleteIcon>
+    //                   </IconButton>
+    //                 </TableCell>
+    //             </TableRow>
+    //     )
+    // }
+
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);  
+    const handleOpenDeleteDialog = () => {
+      setOpenDeleteDialog(true);
+    };
+  
+
+    
 
     return (
         <Fragment>
@@ -175,8 +256,28 @@ export default function DanhSachThuChi(props) {
                     </TableRow>
                 </TableFooter>
             </Table>
-            <DialogThuChi getApi={getApi} urlApi={url} urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search} setOpenFormDialog={setOpenFormDialog} openFormDialog = {openFormDialog}
-            radioData = {radioData} />
+            <Button variant="outlined" color="primary" onClick={handleAddNew}>
+                Thêm mới
+            </Button>
+            <DialogThuChi 
+              onEdit = {onEdit}
+              emptyRowIndex = {emptyRowIndex}
+              rowDataIndex = {rowDataIndex}
+              getApi={getApi} 
+              urlApi={url} 
+              urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search} 
+              setOpenFormDialog={setOpenFormDialog} 
+              openFormDialog = {openFormDialog}
+              radioData = {radioData} />
+            <DialogDelete 
+              getApi={getApi} 
+              urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search}
+              urlApi={url} 
+              rowIndex = {rowIndex} 
+              setRowIndex={setRowIndex} 
+              openDialog = {openDeleteDialog}
+              setOpenDialog = {setOpenDeleteDialog}
+            />
         </Fragment>        
     );
 }

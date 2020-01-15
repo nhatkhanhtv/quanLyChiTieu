@@ -28,6 +28,37 @@ class ThongTinThuChiController extends Controller
         $data['ngay_thang_nam'] = date('Y-m-d',strtotime($data['ngay_thang_nam']));
         $data = $model->create($data);
     }
+
+    public function update(Request $request,$id)
+    {    
+        $data=$request->all();
+        $data['ngay_thang_nam'] = date('Y-m-d',strtotime($data['ngay_thang_nam']));
+        $model=ThongTinThuChi::find($id);
+        
+        $model=$model->update($data);      
+        
+
+        return ThongTinThuChi::find($id);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $data = $request->all();
+        $model = ThongTinThuChi::find($id)->delete();
+
+        $search_term = $request->input('searchQuery');
+        $rowsPerPage = $request->per_page;
+        
+        if ($search_term!="undefined") {
+            $results = ThongTinThuChi::select('*')->where('noi_dung', 'LIKE', '%'.$search_term.'%')->orderBy('id','desc')->paginate($rowsPerPage);
+        } else {
+            $results = ThongTinThuChi::select('*')->orderBy('id','desc')->paginate($rowsPerPage);
+        }
+
+        
+        return $results;
+
+    }
 }
 
 ?>
