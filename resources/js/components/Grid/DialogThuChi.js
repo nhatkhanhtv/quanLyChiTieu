@@ -33,8 +33,16 @@ export default function DialogThuChi(props) {
         noi_dung:"",
         so_tien:"",
         ngay_thang_nam:new Date(Date.now()).toLocaleString(),
-        loai:0
+        loai:1
     });
+
+    const handleResetForm = () => {
+        let form = {noi_dung:"1",
+        so_tien:"1",
+        ngay_thang_nam:new Date(Date.now()).toLocaleString(),
+        loai:1};
+        setData({...form});
+    };    
 
     const handleClickOpen = () => {
         setOpenFormDialog(true);
@@ -45,13 +53,7 @@ export default function DialogThuChi(props) {
         // clearForm();
     };    
 
-    const handleResetForm = () => {
-        let form = {noi_dung:"",
-        so_tien:"",
-        ngay_thang_nam:new Date(Date.now()).toLocaleString(),
-        loai:0};
-        setData({ ...data, form });
-    };    
+   
   
     const [selectedDate, setSelectedDate] = React.useState(new Date(Date.now()).toLocaleString());
     const handleDateChange = key => date => {
@@ -68,11 +70,7 @@ export default function DialogThuChi(props) {
         if(checked)
         {
             setData({ ...data, [key]: val });
-        }     
-          
-        
-        //console.log(date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear())
-
+        } 
     };
     const classes = useStyles();
     const handleTextChange = key => event => {
@@ -136,14 +134,14 @@ export default function DialogThuChi(props) {
                             value = {data.so_tien}
                             />
                         
-                        <RenderDateField 
+                        {/* <RenderDateField 
                             name = 'ngay_thang_nam'
                             label = 'Ngày'
                             handleDateChange = {handleDateChange('ngay_thang_nam')}
                             selectedDate = {selectedDate}
                         />
 
-                        
+                         */}
                         <RenderRadioButton 
                             name = 'loai'
                             label = 'Loại'
