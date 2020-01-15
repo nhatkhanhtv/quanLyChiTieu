@@ -32,17 +32,21 @@ export default function DialogThuChi(props) {
     const [data,setData] = useState({
         noi_dung:"",
         so_tien:"",
-        ngay_thang_nam:new Date(Date.now()).toLocaleString(),
+        ngay_thang_nam:new Date(Date.now()).toDateString(),
         loai:1
     });
 
     const handleResetForm = () => {
+        clearForm();
+    };
+    
+    const clearForm = () => {
         let form = {noi_dung:"1",
         so_tien:"1",
-        ngay_thang_nam:new Date(Date.now()).toLocaleString(),
+        ngay_thang_nam:new Date(Date.now()).toDateString(),
         loai:1};
         setData({...form});
-    };    
+    }
 
     const handleClickOpen = () => {
         setOpenFormDialog(true);
@@ -50,16 +54,17 @@ export default function DialogThuChi(props) {
     
     const handleClose = () => {
         setOpenFormDialog(false);
-        // clearForm();
+        clearForm();
     };    
 
    
   
-    const [selectedDate, setSelectedDate] = React.useState(new Date(Date.now()).toLocaleString());
+    // const [selectedDate, setSelectedDate] = React.useState(new Date(Date.now()).toLocaleString());
     const handleDateChange = key => date => {
-        setSelectedDate(date);
-        setData({ ...data, [key]: date });
-        //console.log(date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear())
+        // setSelectedDate(date);
+        console.log(date);
+
+        setData({ ...data, [key]: date.toDateString() });
 
     };
 
@@ -79,11 +84,7 @@ export default function DialogThuChi(props) {
 
     const handleSubmit = event => {
         sendData();        
-        setData({noi_dung:"",
-            so_tien:"",
-            ngay_thang_nam:new Date(Date.now()).toLocaleString(),
-            loai:0
-        });
+        clearForm();
         setOpenFormDialog(false);
         // console.log(data);
         event.preventDefault();
@@ -134,14 +135,15 @@ export default function DialogThuChi(props) {
                             value = {data.so_tien}
                             />
                         
-                        {/* <RenderDateField 
+                        <RenderDateField 
                             name = 'ngay_thang_nam'
                             label = 'Ngày'
                             handleDateChange = {handleDateChange('ngay_thang_nam')}
-                            selectedDate = {selectedDate}
+                            // selectedDate = {selectedDate}
+                            value = {data.ngay_thang_nam}
                         />
 
-                         */}
+                        
                         <RenderRadioButton 
                             name = 'loai'
                             label = 'Loại'

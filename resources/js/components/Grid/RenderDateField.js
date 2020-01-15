@@ -7,7 +7,9 @@ import {
 } from '@material-ui/pickers';
 
 export default function RenderDateField(props) {
-    const {label, handleDateChange, name, selectedDate } = props;
+    const {label, handleDateChange, name, 
+      //selectedDate, 
+      value } = props;
 
 
 
@@ -22,7 +24,7 @@ export default function RenderDateField(props) {
         id="date-picker-inline"
         label={label}
         name={name}
-        value= {selectedDate}
+        value= {value}
         onChange={handleDateChange}
         KeyboardButtonProps={{
             'aria-label': 'change date',
