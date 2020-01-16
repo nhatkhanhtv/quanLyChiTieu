@@ -15,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import DialogDelete from './DialogDelete';
 
-import RenderTextField from './RenderTextField';
+import { TextField } from '@material-ui/core';
 
 const useStyles1 = makeStyles(theme => ({
     root: {
@@ -135,13 +135,13 @@ export default function DanhSachThuChi(props) {
               });
         }
       function handleChangeRowsPerPage(event) {  
-        getApi(url_api+'?searchQuery='+search+'per_page='+parseInt(event.target.value, 10));
+        getApi(url+'?searchQuery='+search+'per_page='+parseInt(event.target.value, 10));
         
       }
       function keyPress(e){    
           setSearch(e.target.value);
-          let url = url_api+'?searchQuery='+e.target.value+'&per_page='+state.per_page.toString();
-          getApi(url);
+          let urlGet = url+'?searchQuery='+e.target.value+'&per_page='+state.per_page.toString();
+          getApi(urlGet);
     
         }
     
@@ -259,6 +259,12 @@ export default function DanhSachThuChi(props) {
             <Button variant="outlined" color="primary" onClick={handleAddNew}>
                 Thêm mới
             </Button>
+            <TextField 
+              name = 'search'
+              label = 'Tra cứu'
+              onChange = {(e)=>keyPress(e)}
+              value = {search}
+            />
             <DialogThuChi 
               onEdit = {onEdit}
               emptyRowIndex = {emptyRowIndex}
