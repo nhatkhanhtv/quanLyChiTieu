@@ -10,10 +10,6 @@ export default function RenderDateField(props) {
     const {label, handleDateChange, name, 
       //selectedDate, 
       value } = props;
-
-
-
-    
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker

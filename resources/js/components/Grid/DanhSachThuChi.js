@@ -57,12 +57,7 @@ export default function DanhSachThuChi(props) {
     const [search,setSearch]=useState("");
     
     const [openFormDialog,setOpenFormDialog] = useState(false);
-    // const [formData,setFormData] = useState({
-    //   noi_dung:"",
-    //   so_tien:"",
-    //   ngay_thang_nam:new Date(Date.now()).toDateString(),
-    //   loai:1
-    // });
+    
     const handleAddNew = () => {
       setOpenFormDialog(true);
     }
@@ -77,7 +72,19 @@ export default function DanhSachThuChi(props) {
           text:"Khoản thu"
       },
       
-  ];    
+    ];    
+
+    const radioDataLuu = [
+      {
+          id:3,
+          text:"Lưu "
+      },
+      {
+          id:4,
+          text:"Không lưu"
+      },
+      
+    ]; 
 
     function getApi(url){
         axios.get(url).then(json=>{
@@ -188,43 +195,11 @@ export default function DanhSachThuChi(props) {
         )
     }
 
-    // const renderEditRow = (row,index) => {
-    //   let loai = radioData.find( element => element.id == row.loai);
-    //     return (
-    //             <TableRow key={row.id}>
-    //                 <TableCell>{index+1}</TableCell>
-    //                 <TableCell>
-    //                   <RenderTextField 
-    //                         name = 'noi_dung'
-    //                         label = 'Nội dung'
-    //                         handleTextChange = {handleTextChange('noi_dung')}
-    //                         value = {data.noi_dung}
-    //                         />
-    //                 </TableCell>
-    //                 <TableCell>{row.so_tien}</TableCell>
-    //                 <TableCell>{row.ngay_thang_nam}</TableCell>
-    //                 <TableCell>{loai.text}</TableCell>
-    //                 <TableCell>
-    //                   <IconButton onClick={(e)=>handleButtonEdit(e,row)}>
-    //                     <EditIcon></EditIcon>
-    //                   </IconButton>
-                      
-    //                   <IconButton  onClick={(e)=>handleButtonDelete(e,row.id)}>
-    //                     <DeleteIcon></DeleteIcon>
-    //                   </IconButton>
-    //                 </TableCell>
-    //             </TableRow>
-    //     )
-    // }
-
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);  
     const handleOpenDeleteDialog = () => {
       setOpenDeleteDialog(true);
     };
   
-
-    
-
     return (
         <Fragment>
             <Table>
@@ -274,7 +249,8 @@ export default function DanhSachThuChi(props) {
               urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search} 
               setOpenFormDialog={setOpenFormDialog} 
               openFormDialog = {openFormDialog}
-              radioData = {radioData} />
+              radioData = {radioData}
+              radioDataLuu= {radioDataLuu} />
             <DialogDelete 
               getApi={getApi} 
               urlGetData = {url+"?per_page="+state.per_page.toString()+"&searchQuery="+search}

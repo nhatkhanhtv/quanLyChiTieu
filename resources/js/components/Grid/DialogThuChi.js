@@ -11,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Slide from '@material-ui/core/Slide';
-
+import axios from 'axios';
 const useStyles = makeStyles(theme => ({
     root: {
       '& > *': {
@@ -184,14 +184,12 @@ export default function DialogThuChi(props) {
                             value={data.loai}
                             radioData = {radioData}
                             handleRadioChange = {handleRadioChange('loai')}
-                        />
-                        
-                        
-                    
+                        />                        
+                       
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleResetForm} color="primary">
-                        Reset
+                        Nhập lại
                     </Button>
                     <Button onClick={handleClose} color="primary">
                         Hủy bỏ
